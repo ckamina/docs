@@ -1,127 +1,151 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.3",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
+    "title": "API de Kamina Academy",
+    "description": "API para crear una sesion embebida de Kamina Academy",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
+      "url": "https://api.kamina.academy",
+      "description": "Servidor de producción"
+    },
     {
-      "bearerAuth": []
+      "url": "https://api-dev.kamina.academy",
+      "description": "Servidor de desarrollo"
     }
   ],
   "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
+    "/embed": {
+      "post": {
+        "summary": "Crear una sesion embebida para un usuario",
+        "description": "Crea una URL de sesión embebida para un usuario que ya está autenticado en la aplicación o ambiente del cliente. La aplicación del cliente debe proveer un token Bearer válido en la cabecera de autorización, junto con los datos del usuario. Si la solicitud es exitosa, la respuesta incluirá una URL única con un token de una duración acordada con el cliente (por ejemplo, https://[cliente].kamina.academy?token=XYZ) que se puede embeber en otro ambiente.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "parameters": [
           {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
+            "name": "X-Company-Name",
+            "in": "header",
+            "description": "Nombre de la empresa a la que pertenece el usuario",
+            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string",
+              "example": "Acme Inc."
             }
           }
         ],
+        "requestBody": {
+          "description": "Datos del usuario necesarios para crear la sesión embebida (sin incluir la compañía)",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "last_name",
+                  "document_number",
+                  "phone_number",
+                  "born_date"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nombre del usuario",
+                    "example": "Juan"
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "description": "Apellido del usuario",
+                    "example": "Pérez"
+                  },
+                  "document_number": {
+                    "type": "string",
+                    "description": "Número de documento oficial (Cédula)",
+                    "example": "1712345678"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "description": "Número de teléfono del usuario",
+                    "example": "+59312345678"
+                  },
+                  "born_date": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Fecha de nacimiento del usuario (YYYY-MM-DD)",
+                    "example": "1990-05-15"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "Éxito: se ha creado la URL de sesión embebida",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
+                  "type": "object",
+                  "properties": {
+                    "embedUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "example": "https://[cliente].kamina.academy?token=abc123...",
+                      "description": "URL única que contiene un token de un solo uso o de corta duración que otorga acceso a la sesión embebida."
+                    }
                   }
                 }
               }
             }
           },
           "400": {
-            "description": "Unexpected error",
+            "description": "Solicitud inválida: faltan campos obligatorios o los datos del usuario son erróneos",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid request body: faltan campos requeridos o hay datos incorrectos."
+                    }
+                  }
                 }
               }
             }
           },
-          "400": {
-            "description": "unexpected error",
+          "401": {
+            "description": "Falta o es inválido el encabezado de autorización",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Missing Authorization header"
+                    }
+                  }
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
           },
-          "400": {
-            "description": "unexpected error",
+          "403": {
+            "description": "Token Bearer inválido o expirado",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid token"
+                    }
+                  }
                 }
               }
             }
@@ -131,64 +155,11 @@
     }
   },
   "components": {
-    "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
-          },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
-          }
-        }
-      },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
-        ]
-      },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      }
-    },
     "securitySchemes": {
-      "bearerAuth": {
+      "BearerAuth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "bearerFormat": "Token estático (cadena aleatoria o similar)"
       }
     }
   }

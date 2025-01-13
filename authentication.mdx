@@ -1,0 +1,30 @@
+---
+title: 'Autenticación'
+description: 'Guía para autenticar a los endpoints del API de kamina Academy'
+---
+
+<Info>
+  **Nota**: Contactar al equipo de soporte para su API_KEY y COMPANY_NAME
+</Info>
+
+Se necesita 2 Headers para la autenticación:
+
+1. (`Authorization: Bearer API_KEY`)
+2. (`X-Company-Name: COMPANY_NAME`)
+
+## Ejemplo
+
+```
+curl --request POST \
+  --url https://api.kamina.academy/embed \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --header 'X-Company-Name: <x-company-name>' \
+  --data '{
+  "name": "Juan",
+  "last_name": "Pérez",
+  "document_number": "1712345678",
+  "phone_number": "+59312345678",
+  "born_date": "1990-05-15"
+}'
+```

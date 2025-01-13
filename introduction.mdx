@@ -1,71 +1,28 @@
 ---
-title: Introduction
-description: "Welcome to the home of your new documentation"
+title: Introducción
+description: "Bienvenido a los API docs de kamina. Aquí encuentras una guía step-by-step para integrar tu aplicación con kamina."
 ---
 
 <img
-  className="block dark:hidden"
-  src="/images/hero-light.svg"
+  src="/images/B.svg"
   alt="Hero Light"
 />
+
+- Integración web con kamina Academy
+- Autenticación de usuarios existentes
+- URL por usuario
+
+
+## Overview
+
+El siguiente diagrama visualiza la integración de kamina Academy dentro de una aplicación web ó móvil.
+
 <img
   className="hidden dark:block"
-  src="/images/hero-dark.svg"
+  src="/images/diagram.svg"
   alt="Hero Dark"
 />
 
-## Setting up
-
-The first step to world-class documentation is setting up your editing environments.
-
-<CardGroup cols={2}>
-  <Card
-    title="Edit Your Docs"
-    icon="pen-to-square"
-    href="https://mintlify.com/docs/quickstart"
-  >
-    Get your docs set up locally for easy development
-  </Card>
-  <Card
-    title="Preview Changes"
-    icon="image"
-    href="https://mintlify.com/docs/development"
-  >
-    Preview your changes before you push to make sure they're perfect
-  </Card>
-</CardGroup>
-
-## Make it yours
-
-Update your docs to your brand and add valuable content for the best user conversion.
-
-<CardGroup cols={2}>
-  <Card
-    title="Customize Style"
-    icon="palette"
-    href="https://mintlify.com/docs/settings/global"
-  >
-    Customize your docs to your company's colors and brands
-  </Card>
-  <Card
-    title="Reference APIs"
-    icon="code"
-    href="https://mintlify.com/docs/api-playground/openapi"
-  >
-    Automatically generate endpoints from an OpenAPI spec
-  </Card>
-  <Card
-    title="Add Components"
-    icon="screwdriver-wrench"
-    href="https://mintlify.com/docs/content/components/accordions"
-  >
-    Build interactive features and designs to guide your users
-  </Card>
-  <Card
-    title="Get Inspiration"
-    icon="stars"
-    href="https://mintlify.com/customers"
-  >
-    Check out our showcase of our favorite documentation
-  </Card>
-</CardGroup>
+1. Para cada usuario llamar al endpoint embed via (`POST`) ([Documentación](/api-reference))
+2. El servicio retonra una URL única por usuario (ej.: (`https://[cliente].kamina.academy/token=123456789abcdefghijk`)
+3. Embeber kamina Academy en la webview o iframe con URL única por usuario
