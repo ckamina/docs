@@ -47,6 +47,7 @@
                 "required": [
                   "name",
                   "last_name",
+                  "email",
                   "document_number",
                   "phone_number",
                   "born_date"
@@ -58,6 +59,11 @@
                     "example": "Juan"
                   },
                   "last_name": {
+                    "type": "string",
+                    "description": "Apellido del usuario",
+                    "example": "Pérez"
+                  },
+                  "email": {
                     "type": "string",
                     "description": "Apellido del usuario",
                     "example": "Pérez"
