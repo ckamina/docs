@@ -81,7 +81,7 @@
                   "born_date": {
                     "type": "string",
                     "format": "date",
-                    "description": "Fecha de nacimiento del usuario (YYYY-MM-DD)",
+                    "description": "Fecha de nacimiento del usuario (DD-MM-YYYY)",
                     "example": "01-25-2000"
                   }
                 }
