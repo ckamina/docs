@@ -65,8 +65,8 @@
                   },
                   "email": {
                     "type": "string",
-                    "description": "Apellido del usuario",
-                    "example": "Pérez"
+                    "description": "Correo electrónico del usuario",
+                    "example": "email@ejemplo.com"
                   },
                   "document_number": {
                     "type": "string",
@@ -82,7 +82,7 @@
                     "type": "string",
                     "format": "date",
                     "description": "Fecha de nacimiento del usuario (YYYY-MM-DD)",
-                    "example": "1990-05-15"
+                    "example": "01-25-2000"
                   }
                 }
               }
