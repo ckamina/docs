@@ -1,0 +1,147 @@
+{
+    "openapi": "3.1.0",
+    "info": { "title": "Kamina User Registration API", "version": "0.1.0", "description": "API para el registro de usuarios en el sistema Kamina" },
+    "servers": [
+      {
+        "url": "https://api.joinkamina.com",
+        "description": "Servidor de producción"
+      },
+      {
+        "url": "https://api-dev.joinkamina.com",
+        "description": "Servidor de desarrollo"
+      }
+    ],
+    "paths": {
+      "/user/register-user-ext": {
+        "post": {
+          "tags": ["User"],
+          "summary": "Register User",
+          "description": "Registro de usuario con los datos del cliente externo y entrega de código único para cada usuario",
+          "operationId": "register_user_ext",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/RegisterUserExt" }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Código generado con éxito",
+              "content": {
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/SuccessResponse" }
+                }
+              }
+            },
+            "422": {
+              "description": "Error de validación",
+              "content": {
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+                }
+              }
+            }
+          },
+          "security": [{ "HTTPBearer": [] }]
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "RegisterUserExt": {
+          "properties": {
+            "document_number": {
+              "type": "string",
+              "description": "Número de documento oficial (Cédula)",
+              "example": "1712345678"
+            },
+            "phone_number": {
+              "type": "string",
+              "description": "Número de teléfono del usuario",
+              "example": "+59312345678"
+            },
+            "name": {
+              "type": "string",
+              "description": "Nombre del usuario",
+              "example": "Juan"
+            },
+            "last_name": {
+              "type": "string",
+              "description": "Apellido del usuario",
+              "example": "Pérez"
+            },
+            "email": {
+              "type": "string",
+              "description": "Correo electrónico del usuario",
+              "example": "email@ejemplo.com"
+            },
+            "born_date": {
+              "type": "string",
+              "format": "date",
+              "description": "Fecha de nacimiento del usuario (DD-MM-YYYY)",
+              "example": "01-25-2000"
+            }
+          },
+          "type": "object",
+          "required": ["document_number", "phone_number", "name", "last_name", "email", "born_date"],
+          "title": "RegisterUserExt"
+        },
+        "SuccessResponse": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Indica si la operación fue exitosa",
+              "example": true
+            },
+            "message": {
+              "type": "string",
+              "description": "Mensaje descriptivo del resultado",
+              "example": "Codigo generado con éxito"
+            },
+            "data": {
+              "type": "string",
+              "description": "Código único generado para el usuario",
+              "example": "ggcbp4"
+            },
+            "user": {
+              "nullable": true,
+              "description": "Datos del usuario (actualmente null)",
+              "example": null
+            }
+          },
+          "required": ["success", "message", "data", "user"],
+          "title": "SuccessResponse"
+        },
+        "HTTPValidationError": {
+          "type": "object",
+          "properties": {
+            "detail": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "loc": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "msg": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "title": "HTTPValidationError"
+        }
+      },
+      "securitySchemes": { "HTTPBearer": { "type": "http", "scheme": "bearer" } }
+    }
+  }

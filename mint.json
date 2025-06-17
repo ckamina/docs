@@ -27,9 +27,14 @@
   },
   "tabs": [
     {
-      "name": "API Reference",
+      "name": "Embed API",
       "url": "api-reference",
-      "openapi": "/api-reference/openapi.json"
+      "openapi": "/api-reference/academy.json"
+    },
+    {
+      "name": "User Registration API",
+      "url": "user-api",
+      "openapi": "/api-reference/app.json"
     }
   ],
   "anchors": [
